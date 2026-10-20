@@ -1,0 +1,32 @@
+{
+  "name": "Ultimate Fruit Ninja",
+  "short_name": "FruitNinja",
+  "description": "Slice, Score, and Master! Complete arcade fruit slicing PWA game with 7 blades and 3 game modes.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#140b07",
+  "theme_color": "#140b07",
+  "categories": ["games", "arcade"],
+  "icons": [
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icons/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}

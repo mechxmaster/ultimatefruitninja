@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="theme-color" content="#140b07">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="description" content="Ultimate Fruit Ninja - Nostalgic arcade fruit slicing game with modern graphics, responsive touch controls, juicy particle effects, 7 legendary blades, and 3 game modes.">
+    <title>Ultimate Fruit Ninja: Slice. Score. Master.</title>
+    
+    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/svg+xml" href="icons/icon.svg">
+    <link rel="apple-touch-icon" href="icons/icon-192.png">
+</head>
+<body>
+    <div id="app-container">
+        <!-- Interactive Canvas -->
+        <canvas id="game-canvas"></canvas>
+
+        <!-- Toast Notifications for Achievements & Blades -->
+        <div id="toast-container"></div>
+
+        <!-- ===================================================
+             MAIN MENU SCREEN
+             =================================================== -->
+        <div id="main-menu" class="app-screen active">
+            <div class="screen-content">
+                <div class="title-container">
+                    <h1 class="game-title">Ultimate<br>Fruit Ninja</h1>
+                    <div class="game-subtitle">Slice. Score. Master.</div>
+                    <div class="best-badge">
+                        <span>🏆</span> BEST: <span id="menu-best-val">0</span> PTS
+                    </div>
+                </div>
+
+                <div class="menu-buttons">
+                    <button id="btn-play-quick" class="btn-arcade btn-primary" aria-label="Play Classic Mode">
+                        <span>⚔️</span> PLAY NOW
+                    </button>
+                    <button id="btn-open-modes" class="btn-arcade btn-secondary" aria-label="Select Game Mode">
+                        <span>🎮</span> GAME MODES
+                    </button>
+                    <div class="btn-grid-row">
+                        <button id="btn-open-blades" class="btn-arcade btn-secondary" aria-label="Blade Dojo">
+                            <span>🗡️</span> DOJO
+                        </button>
+                        <button id="btn-open-scores" class="btn-arcade btn-secondary" aria-label="High Scores">
+                            <span>🏅</span> SCORES
+                        </button>
+                    </div>
+                    <div class="btn-grid-row">
+                        <button id="btn-open-achievements" class="btn-arcade btn-secondary" aria-label="Achievements">
+                            <span>🏆</span> AWARDS
+                        </button>
+                        <button id="btn-open-settings" class="btn-arcade btn-secondary" aria-label="Settings">
+                            <span>⚙️</span> SETTINGS
+                        </button>
+                    </div>
+                    <button id="btn-open-tutorial" class="btn-arcade btn-secondary" aria-label="How to Play and Tutorial">
+                        <span>📜</span> HOW TO PLAY
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===================================================
+             GAMEPLAY SCREEN & HUD
+             =================================================== -->
+        <div id="game-screen" class="app-screen">
+            <header id="game-hud">
+                <div class="hud-left">
+                    <div class="hud-score-card">
+                        <span class="hud-icon">🍉</span>
+                        <span id="hud-score-val" class="hud-score-val">0</span>
+                    </div>
+                    <div id="hud-double-badge" class="hud-double-badge">2X ACTIVE!</div>
+                </div>
+
+                <div class="hud-center">
+                    <!-- Timer for Arcade and Zen Modes -->
+                    <div id="hud-timer-container" class="hud-timer-card">
+                        <span class="hud-icon">⏱️</span>
+                        <span id="hud-timer-val" class="hud-timer-val">90</span>
+                    </div>
+
+                    <!-- Lives for Classic Mode -->
+                    <div id="hud-lives-container" class="hud-lives">
+                        <span id="life-1" class="life-sword">⚔️</span>
+                        <span id="life-2" class="life-sword">⚔️</span>
+                        <span id="life-3" class="life-sword">⚔️</span>
+                    </div>
+                </div>
+
+                <div class="hud-right">
+                    <button id="btn-pause-game" class="hud-btn" aria-label="Pause Game">
+                        ⏸️
+                    </button>
+                </div>
+            </header>
+
+            <!-- Tutorial Instruction Banner -->
+            <div id="tutorial-hud-banner" class="tutorial-banner hidden">
+                <p id="tutorial-instruction" class="tutorial-text">Swipe across the fruit to slice it!</p>
+            </div>
+        </div>
+
+        <!-- ===================================================
+             MODE SELECTION MODAL
+             =================================================== -->
+        <div id="mode-select-modal" class="modal-overlay hidden">
+            <div class="modal-card">
+                <div class="modal-header">
+                    <h2 class="modal-title">Select Mode</h2>
+                    <button class="modal-close btn-close-modal" aria-label="Close">✕</button>
+                </div>
+                <div class="modal-body">
+                    <div class="mode-card" data-mode="classic">
+                        <div class="mode-icon">⚔️</div>
+                        <div class="mode-details">
+                            <div class="mode-name">Classic Mode</div>
+                            <div class="mode-desc">3 lives. Avoid bombs, pull off high-scoring combos, and don't let fruits fall!</div>
+                        </div>
+                    </div>
+
+                    <div class="mode-card" data-mode="zen">
+                        <div class="mode-icon">🌸</div>
+                        <div class="mode-details">
+                            <div class="mode-name">Zen Mode</div>
+                            <div class="mode-desc">Relaxed 90s session. No bombs, no lives lost, peaceful drifting sakura blossoms.</div>
+                        </div>
+                    </div>
+
+                    <div class="mode-card" data-mode="arcade">
+                        <div class="mode-icon">⚡</div>
+                        <div class="mode-details">
+                            <div class="mode-name">Arcade Mode</div>
+                            <div class="mode-desc">90-second blitz! Special Freeze, Frenzy & Double Score fruits. Bombs deduct time & score!</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===================================================
+             PAUSE MODAL
+             =================================================== -->
+        <div id="pause-modal" class="modal-overlay hidden">
+            <div class="modal-card">
+                <div class="modal-header">
+                    <h2 class="modal-title">Game Paused</h2>
+                </div>
+                <div class="modal-body">
+                    <button id="btn-resume-game" class="btn-arcade btn-primary">
+                        <span>▶️</span> RESUME
+                    </button>
+                    <button id="btn-restart-game" class="btn-arcade btn-secondary">
+                        <span>🔄</span> RESTART
+                    </button>
+                    <button id="btn-pause-settings" class="btn-arcade btn-secondary">
+                        <span>⚙️</span> SETTINGS
+                    </button>
+                    <button id="btn-pause-menu" class="btn-arcade btn-secondary">
+                        <span>🏠</span> MAIN MENU
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===================================================
+             GAME OVER MODAL
+             =================================================== -->
+        <div id="game-over-modal" class="modal-overlay hidden">
+            <div class="modal-card gameover-card">
+                <h2 class="gameover-title">GAME OVER</h2>
+                <div id="new-best-badge" class="new-best-banner hidden">✨ NEW PERSONAL BEST! ✨</div>
+
+                <div class="stat-label">FINAL SCORE</div>
+                <div id="final-score-val" class="score-display-big">0</div>
+
+                <div class="stats-grid">
+                    <div class="stat-box">
+                        <div class="stat-label">FRUITS SLICED</div>
+                        <div id="stat-sliced-val" class="stat-val">0</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-label">BEST COMBO</div>
+                        <div id="stat-combo-val" class="stat-val">0x</div>
+                    </div>
+                    <div class="stat-box" style="grid-column: span 2;">
+                        <div class="stat-label">PERSONAL BEST</div>
+                        <div id="stat-best-val" class="stat-val">0</div>
+                    </div>
+                </div>
+
+                <div class="menu-buttons" style="margin-top: 10px;">
+                    <button id="btn-play-again" class="btn-arcade btn-primary">
+                        <span>🔄</span> PLAY AGAIN
+                    </button>
+                    <button id="btn-gameover-menu" class="btn-arcade btn-secondary">
+                        <span>🏠</span> MAIN MENU
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===================================================
+             BLADE DOJO MODAL
+             =================================================== -->
+        <div id="blades-modal" class="modal-overlay hidden">
+            <div class="modal-card">
+                <div class="modal-header">
+                    <h2 class="modal-title">Blade Dojo</h2>
+                    <button class="modal-close btn-close-modal" aria-label="Close">✕</button>
+                </div>
+                <div class="modal-body" id="blades-list">
+                    <!-- Populated dynamically via app.js -->
+                </div>
+            </div>
+        </div>
+
+        <!-- ===================================================
+             HIGH SCORES MODAL
+             =================================================== -->
+        <div id="high-scores-modal" class="modal-overlay hidden">
+            <div class="modal-card">
+                <div class="modal-header">
+                    <h2 class="modal-title">Leaderboard</h2>
+                    <button class="modal-close btn-close-modal" aria-label="Close">✕</button>
+                </div>
+                <div class="tabs-header">
+                    <button class="tab-btn active" data-tab="classic">Classic</button>
+                    <button class="tab-btn" data-tab="zen">Zen</button>
+                    <button class="tab-btn" data-tab="arcade">Arcade</button>
+                </div>
+                <div class="modal-body" id="scores-list">
+                    <!-- Populated dynamically via app.js -->
+                </div>
+            </div>
+        </div>
+
+        <!-- ===================================================
+             ACHIEVEMENTS MODAL
+             =================================================== -->
+        <div id="achievements-modal" class="modal-overlay hidden">
+            <div class="modal-card">
+                <div class="modal-header">
+                    <h2 class="modal-title">Achievements</h2>
+                    <button class="modal-close btn-close-modal" aria-label="Close">✕</button>
+                </div>
+                <div class="modal-body" id="achievements-list">
+                    <!-- Populated dynamically via app.js -->
+                </div>
+            </div>
+        </div>
+
+        <!-- ===================================================
+             SETTINGS MODAL
+             =================================================== -->
+        <div id="settings-modal" class="modal-overlay hidden">
+            <div class="modal-card">
+                <div class="modal-header">
+                    <h2 class="modal-title">Settings</h2>
+                    <button class="modal-close btn-close-modal" aria-label="Close">✕</button>
+                </div>
+                <div class="modal-body">
+                    <!-- Difficulty Setting -->
+                    <div class="setting-row">
+                        <div>
+                            <div class="setting-label">Difficulty Preset</div>
+                            <div class="setting-desc">Affects launch speeds and fruit waves</div>
+                        </div>
+                        <div class="setting-control">
+                            <select id="setting-difficulty">
+                                <option value="relaxed">Relaxed (Gentle)</option>
+                                <option value="easy">Easy</option>
+                                <option value="normal" selected>Normal</option>
+                                <option value="fast">Fast (Master)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Sound SFX -->
+                    <div class="setting-row">
+                        <div>
+                            <div class="setting-label">Sound Effects</div>
+                            <div class="setting-desc">Fruit splats, blade whooshes, combos</div>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" id="setting-sound" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+
+                    <!-- Music -->
+                    <div class="setting-row">
+                        <div>
+                            <div class="setting-label">Dojo Music</div>
+                            <div class="setting-desc">Tranquil Japanese pentatonic music</div>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" id="setting-music" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+
+                    <!-- Volume Slider -->
+                    <div class="setting-row">
+                        <div>
+                            <div class="setting-label">Master Volume</div>
+                            <div class="setting-desc">Output volume level</div>
+                        </div>
+                        <div class="setting-control">
+                            <input type="range" id="setting-volume" min="0" max="1" step="0.1" value="0.8">
+                        </div>
+                    </div>
+
+                    <!-- Haptic Vibration -->
+                    <div class="setting-row">
+                        <div>
+                            <div class="setting-label">Haptic Vibration</div>
+                            <div class="setting-desc">Tactile response on mobile devices</div>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" id="setting-vibration" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+
+                    <!-- Reduced Motion -->
+                    <div class="setting-row">
+                        <div>
+                            <div class="setting-label">Reduced Motion</div>
+                            <div class="setting-desc">Disables camera screen shake effects</div>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" id="setting-motion">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+
+                    <!-- Swipe Sensitivity -->
+                    <div class="setting-row">
+                        <div>
+                            <div class="setting-label">Swipe Sensitivity</div>
+                            <div class="setting-desc">Adjust touch blade responsiveness</div>
+                        </div>
+                        <div class="setting-control">
+                            <input type="range" id="setting-sensitivity" min="0.5" max="2.0" step="0.25" value="1.0">
+                        </div>
+                    </div>
+
+                    <!-- High Contrast Accessibility -->
+                    <div class="setting-row">
+                        <div>
+                            <div class="setting-label">High Contrast</div>
+                            <div class="setting-desc">Enhanced contrast for better visibility</div>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" id="setting-contrast">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+
+                    <button id="btn-reset-data" class="btn-arcade btn-secondary" style="margin-top: 10px; border-color: #ff3344; color: #ff6677;">
+                        <span>⚠️</span> RESET ALL DATA
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===================================================
+             HOW TO PLAY & TUTORIAL MODAL
+             =================================================== -->
+        <div id="tutorial-modal" class="modal-overlay hidden">
+            <div class="modal-card">
+                <div class="modal-header">
+                    <h2 class="modal-title">How to Play</h2>
+                    <button class="modal-close btn-close-modal" aria-label="Close">✕</button>
+                </div>
+                <div class="modal-body">
+                    <div class="mode-card" style="cursor: default;">
+                        <div class="mode-icon">👆</div>
+                        <div class="mode-details">
+                            <div class="mode-name">Swipe to Slice</div>
+                            <div class="mode-desc">Drag your finger or mouse across flying fruits to cleave them in two!</div>
+                        </div>
+                    </div>
+
+                    <div class="mode-card" style="cursor: default;">
+                        <div class="mode-icon">⚡</div>
+                        <div class="mode-details">
+                            <div class="mode-name">Combos Award Bonuses</div>
+                            <div class="mode-desc">Slice 3, 4, 5+ fruits in one single fluid stroke to earn huge combo multipliers.</div>
+                        </div>
+                    </div>
+
+                    <div class="mode-card" style="cursor: default;">
+                        <div class="mode-icon">💣</div>
+                        <div class="mode-details">
+                            <div class="mode-name">Beware of Bombs!</div>
+                            <div class="mode-desc">In Classic Mode, slicing a bomb detonates and ends your game. Let bombs fall harmlessly!</div>
+                        </div>
+                    </div>
+
+                    <div class="mode-card" style="cursor: default;">
+                        <div class="mode-icon">🗡️</div>
+                        <div class="mode-details">
+                            <div class="mode-name">Unlock Legendary Blades</div>
+                            <div class="mode-desc">Earn achievements and hit score milestones to unlock all 7 cosmetic blade trails.</div>
+                        </div>
+                    </div>
+
+                    <button id="btn-launch-interactive-tutorial" class="btn-arcade btn-primary" style="margin-top: 8px;">
+                        <span>🥋</span> INTERACTIVE TUTORIAL
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/audio.js"></script>
+    <script src="js/blade.js"></script>
+    <script src="js/fruit.js"></script>
+    <script src="js/particles.js"></script>
+    <script src="js/storage.js"></script>
+    <script src="js/game.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>

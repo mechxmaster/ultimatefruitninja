@@ -1,0 +1,87 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <!-- Background Radial Gradient -->
+    <radialGradient id="bgGrad" cx="50%" cy="40%" r="60%">
+      <stop offset="0%" stop-color="#3d1d0c"/>
+      <stop offset="70%" stop-color="#1c0d05"/>
+      <stop offset="100%" stop-color="#0a0402"/>
+    </radialGradient>
+
+    <!-- Watermelon Rind -->
+    <radialGradient id="rindGrad" cx="35%" cy="35%" r="65%">
+      <stop offset="0%" stop-color="#38a84e"/>
+      <stop offset="75%" stop-color="#1e6830"/>
+      <stop offset="100%" stop-color="#0f3b19"/>
+    </radialGradient>
+
+    <!-- Watermelon Flesh -->
+    <radialGradient id="fleshGrad" cx="45%" cy="45%" r="55%">
+      <stop offset="0%" stop-color="#ff3355"/>
+      <stop offset="85%" stop-color="#e01235"/>
+      <stop offset="100%" stop-color="#b00520"/>
+    </radialGradient>
+
+    <!-- Glowing Blade Gradient -->
+    <linearGradient id="bladeGlow" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#0066ff"/>
+      <stop offset="50%" stop-color="#00d2ff"/>
+      <stop offset="100%" stop-color="#ffffff"/>
+    </linearGradient>
+
+    <filter id="glowFilter" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="12" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background Dojo Emblem -->
+  <rect width="512" height="512" rx="110" fill="url(#bgGrad)"/>
+  <rect x="12" y="12" width="488" height="488" rx="98" fill="none" stroke="#ffd700" stroke-width="6" stroke-opacity="0.5"/>
+
+  <!-- Upper Watermelon Half -->
+  <g transform="translate(230, 210) rotate(-18)">
+    <path d="M -130 0 A 130 130 0 0 1 130 0 Z" fill="url(#rindGrad)"/>
+    <!-- Pale Rind -->
+    <path d="M -118 0 A 118 118 0 0 1 118 0 Z" fill="#d9fcd0"/>
+    <!-- Red Flesh -->
+    <path d="M -106 0 A 106 106 0 0 1 106 0 Z" fill="url(#fleshGrad)"/>
+    <!-- Seeds -->
+    <ellipse cx="-50" cy="-45" rx="5" ry="8" transform="rotate(-30 -50 -45)" fill="#111"/>
+    <ellipse cx="0" cy="-65" rx="5" ry="8" fill="#111"/>
+    <ellipse cx="50" cy="-45" rx="5" ry="8" transform="rotate(30 50 -45)" fill="#111"/>
+  </g>
+
+  <!-- Lower Watermelon Half -->
+  <g transform="translate(282, 302) rotate(16)">
+    <path d="M -130 0 A 130 130 0 0 0 130 0 Z" fill="url(#rindGrad)"/>
+    <!-- Pale Rind -->
+    <path d="M -118 0 A 118 118 0 0 0 118 0 Z" fill="#d9fcd0"/>
+    <!-- Red Flesh -->
+    <path d="M -106 0 A 106 106 0 0 0 106 0 Z" fill="url(#fleshGrad)"/>
+    <!-- Seeds -->
+    <ellipse cx="-45" cy="45" rx="5" ry="8" transform="rotate(30 -45 45)" fill="#111"/>
+    <ellipse cx="0" cy="65" rx="5" ry="8" fill="#111"/>
+    <ellipse cx="45" cy="45" rx="5" ry="8" transform="rotate(-30 45 45)" fill="#111"/>
+  </g>
+
+  <!-- Juice Droplets Spray -->
+  <circle cx="180" cy="180" r="10" fill="#ff2244" opacity="0.85"/>
+  <circle cx="340" cy="330" r="12" fill="#ff2244" opacity="0.85"/>
+  <circle cx="140" cy="270" r="8" fill="#ff2244" opacity="0.9"/>
+  <circle cx="370" cy="230" r="9" fill="#ff2244" opacity="0.9"/>
+  <circle cx="210" cy="360" r="7" fill="#ff2244" opacity="0.8"/>
+
+  <!-- Blade Trail Slash Across Center -->
+  <path d="M 60 380 Q 256 256 450 130" fill="none" stroke="#0033aa" stroke-width="28" stroke-linecap="round" opacity="0.4" filter="url(#glowFilter)"/>
+  <path d="M 60 380 Q 256 256 450 130" fill="none" stroke="#00d2ff" stroke-width="16" stroke-linecap="round" filter="url(#glowFilter)"/>
+  <path d="M 60 380 Q 256 256 450 130" fill="none" stroke="#ffffff" stroke-width="6" stroke-linecap="round"/>
+
+  <!-- Spark Star at Impact Point -->
+  <g transform="translate(256, 256)">
+    <polygon points="0,-35 9,-11 35,0 9,11 0,35 -9,11 -35,0 -9,-11" fill="#fff" filter="url(#glowFilter)"/>
+    <polygon points="0,-22 6,-7 22,0 6,7 0,22 -6,7 -22,0 -6,-7" fill="#ffd700"/>
+  </g>
+</svg>

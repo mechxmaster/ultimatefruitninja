@@ -1,0 +1,19 @@
+# OS and IDE files
+.DS_Store
+Thumbs.db
+*.log
+.idea/
+.vscode/
+
+# Gradle and Android build files
+.gradle/
+build/
+app/build/
+android/.gradle/
+android/build/
+android/app/build/
+*.apk
+*.aab
+
+# Local scratch files
+scratch/
